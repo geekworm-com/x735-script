@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Hardware Power Management & Safe Shutdown daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/x735-pwr.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
