@@ -5,4 +5,4 @@ The original pwm fan control script is from [pimlie/geekworm-x-c1](https://githu
 
 User Guide: https://wiki.geekworm.com/X735-script
 
-Email: info@geekworm.com
+Email: support@geekworm.com
