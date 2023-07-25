@@ -1,0 +1,13 @@
+Source: x735-script
+Section: misc
+Priority: optional
+Maintainer: Molham Al Nasr <dr.molham93@gmail.com>
+Build-Depends: debhelper (>= 12)
+Standards-Version: 4.5.1
+Homepage: https://github.com/molhamalnasr/x735-script
+
+Package: x735-script
+Architecture: all
+Depends: ${misc:Depends}
+Description: Safe shutdown script and fan control for the x735 fan board from geekworm
+ This package contains a safe shutdown script and fan control for the x735 fan board.
