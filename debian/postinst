@@ -1,0 +1,42 @@
+#!/bin/bash
+
+readonly LINE_TO_ADD="dtoverlay=pwm-2chan,pin2=13,func2=4"
+readonly CONFIG_FILE="/boot/config.txt"
+
+# search for the all directives in /boot/config.txt
+search_directive=$(grep -n '^\[all\]' "${CONFIG_FILE}")
+
+# create the [all] directive in /boot/config.txt, if it doesn't exist and append the $LINE_TO_ADD to it
+if [[ -z "${search_directive}" ]]; then
+  echo "[all]" >> "${CONFIG_FILE}"
+  echo "${LINE_TO_ADD}" >> "${CONFIG_FILE}"
+  exit 0
+fi
+
+# get the last defined "all" directive to ensure that the line will be added once and not overwritten.
+last_directive=$(sed -n '$p' <<< $search_directive)
+last_directive_line_number=${last_directive%:*}
+
+# check if the $LINE_TO_ADD exist in the last [all] directive and store the line number
+line_exist=$(sed -n "${last_directive_line_number},/\[.*\]/ {/^\s*${LINE_TO_ADD}/=}" "${CONFIG_FILE}")
+
+if [[ ! -z "${line_exist}" ]]; then
+  echo "the line '${LINE_TO_ADD}' is already exist in the right place in '${CONFIG_FILE}'"
+  echo "Continue installing..."
+  exit 0
+fi
+
+# if the $LINE_TO_ADD exist but it commented out, delete the comment character.
+line_commented=$(sed -n "${last_directive_line_number},/\[.*\]/ {/^\s*#*\s*${LINE_TO_ADD}/=}" "${CONFIG_FILE}")
+if [[ ! -z "${line_commented}" ]]; then
+  echo "the line '${LINE_TO_ADD}' is already exist in the right place in '${CONFIG_FILE}' but it is commented out"
+  echo "uncommenting '${LINE_TO_ADD}'"
+  sed -i "${line_commented} c ${LINE_TO_ADD}" "${CONFIG_FILE}"
+  exit 0
+fi
+
+# if the "all" directive exist but the $LINE_TO_ADD is not exist, append the $LINE_TO_ADD to the all directive.
+echo "Adding the line '${LINE_TO_ADD}' for the first time in '${CONFIG_FILE}'"
+sed -i "${last_directive_line_number} a ${LINE_TO_ADD}" "${CONFIG_FILE}"
+
+exit 0
