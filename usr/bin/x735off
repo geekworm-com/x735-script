@@ -13,7 +13,7 @@ if ! [[ $SLEEP =~ $re ]] ; then
    echo "error: sleep time not a number" >&2; exit 1
 fi
 
-echo "Your device will shutting down in 4 seconds..."
+echo "Your device will shutting down in ${SLEEP} seconds..."
 /bin/sleep $SLEEP
 
 echo "0" > /sys/class/gpio/gpio$BUTTON/value
