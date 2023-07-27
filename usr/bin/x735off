@@ -11,6 +11,9 @@ readonly BUTTON_PATH="${GPIO_PATH}/gpio${BUTTON}"
 readonly PERMISSION_DENIED="151"
 readonly INVALID_CLI_ARG_TYPE="153"
 
+readonly STATE_EXPORT="export"
+readonly STATE_UNEXPORT="unexport"
+
 terminate() {
     local -r msg=$1
     local -r err_code=${2:-150}
@@ -42,14 +45,14 @@ modify_gpio_val() {
 }
 
 gpio_cleanup() {
-   un_export_gpio "unexport"
+   un_export_gpio "${STATE_UNEXPORT}"
    terminate "unexpected error..."
 }
 
 
 # Main method
 function __main__ {
-  un_export_gpio "export"
+  un_export_gpio "${STATE_EXPORT}"
   trap 'gpio_cleanup' EXIT
 
   modify_gpio_val "direction" "out"
