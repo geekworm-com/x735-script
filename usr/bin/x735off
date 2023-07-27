@@ -8,12 +8,12 @@ readonly BUTTON=20
 readonly GPIO_PATH="/sys/class/gpio"
 readonly BUTTON_PATH="${GPIO_PATH}/gpio${BUTTON}"
 
-readonly PERMISSION_DENIED="152"
-readonly INVALID_CLI_ARG_TYPE="151"
+readonly PERMISSION_DENIED="151"
+readonly INVALID_CLI_ARG_TYPE="153"
 
 terminate() {
     local -r msg=$1
-    local -r err_code=${2:-160}
+    local -r err_code=${2:-150}
     echo "${msg}" >&2
     exit "${err_code}"
 }
