@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 readonly LINE_TO_ADD="dtoverlay=pwm-2chan,pin2=13,func2=4"
 readonly CONFIG_FILE="/boot/config.txt"
 readonly BACKUP_FILE="${CONFIG_FILE}.backup"
