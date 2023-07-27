@@ -49,11 +49,12 @@ gpio_cleanup() {
    terminate "unexpected error..."
 }
 
-
 # Main method
 function __main__ {
   un_export_gpio "${STATE_EXPORT}"
-  trap 'gpio_cleanup' EXIT
+  
+  # Handle exit and interrupt signals to cleanup GPIO
+  trap gpio_cleanup EXIT SIGINT SIGTERM
 
   modify_gpio_val "direction" "out"
   modify_gpio_val "value" "1"
