@@ -49,7 +49,8 @@ function __main__ {
   modify_gpio_val "direction" "out"
   modify_gpio_val "value" "1"
 
-  echo "Your device will shutting down in ${SLEEP} seconds..."
+  # Broadcast the sutdown message to all tty sessions.
+  echo "Your device will shutting down in ${SLEEP} seconds..." | wall
   /bin/sleep $SLEEP
 
   modify_gpio_val "value" "0"
