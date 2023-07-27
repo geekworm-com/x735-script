@@ -35,11 +35,17 @@ modify_gpio_val() {
    echo "${value}" > "${BUTTON_PATH}/${file}"
 }
 
+gpio_cleanup() {
+   un_export_gpio "unexport"
+   terminate "unexpected error..."
+}
 
 
 # Main method
 function __main__ {
   un_export_gpio "export"
+  trap 'gpio_cleanup' EXIT
+
   modify_gpio_val "direction" "out"
   modify_gpio_val "value" "1"
 
