@@ -2,6 +2,24 @@
 
 readonly LINE_TO_ADD="dtoverlay=pwm-2chan,pin2=13,func2=4"
 readonly CONFIG_FILE="/boot/config.txt"
+readonly BACKUP_FILE="${CONFIG_FILE}.backup"
+
+readonly FILE_NOT_EXIST="151"
+
+terminate() {
+    local -r msg=$1
+    local -r err_code=${2:-160}
+    echo "${msg}" >&2
+    exit "${err_code}"
+}
+
+# Check if the config file exists
+if [[ ! -e "${CONFIG_FILE}" ]]; then
+  terminate "Config file not found: ${CONFIG_FILE}" "${FILE_NOT_EXIST}"
+fi
+
+# Backup the config file
+cp -p "${CONFIG_FILE}" "${BACKUP_FILE}"
 
 # Search for the all directive in /boot/config.txt
 search_directive=$(grep -n '^\[all\]' "${CONFIG_FILE}")
