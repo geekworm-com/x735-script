@@ -8,6 +8,7 @@ readonly BUTTON=20
 readonly GPIO_PATH="/sys/class/gpio"
 readonly BUTTON_PATH="${GPIO_PATH}/gpio${BUTTON}"
 
+readonly PERMISSION_DENIED="152"
 readonly INVALID_CLI_ARG_TYPE="151"
 
 terminate() {
@@ -16,6 +17,11 @@ terminate() {
     echo "${msg}" >&2
     exit "${err_code}"
 }
+
+# Guard clause to check if the script is running with root privileges (sudo)
+if [[ $EUID -ne 0 ]]; then
+    terminate "This script must be run with root privileges (sudo)." "${PERMISSION_DENIED}"
+fi
 
 if ! [[ $SLEEP =~ ^[0-9\.]+$ ]] ; then
    terminate "error: sleep time not a number" "${INVALID_CLI_ARG_TYPE}"
