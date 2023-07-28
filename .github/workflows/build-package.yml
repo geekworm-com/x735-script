@@ -1,0 +1,41 @@
+name: Build Debian Package
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      run: git config --global user.email "action@github.com" && git config --global user.name "GitHub Action"
+
+    - name: Get Version from Tag
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+    - name: Clone Repository
+      run: git clone . "x735-script-${{ steps.get_version.outputs.VERSION }}"
+
+    - name: Set Version in DEBIAN/control
+      run: sed -i "s/^Version:.*/Version: ${{ steps.get_version.outputs.VERSION }}/g" "x735-script-${{ steps.get_version.outputs.VERSION }}/DEBIAN/control"
+
+    - name: Install dpkg
+      run: sudo apt-get update && sudo apt-get install -y dpkg
+
+    - name: Build Debian Package
+      run: sudo dpkg-deb --build "x735-script-${{ steps.get_version.outputs.VERSION }}"
+
+    - name: Save Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: x735-script-package
+        path: x735-script-${{ steps.get_version.outputs.VERSION }}.deb
