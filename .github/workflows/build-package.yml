@@ -8,38 +8,42 @@ on:
       - main
 
 jobs:
-  build:
+  build-package:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Git
-      run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
+      - name: Set up Git
+        run: |
+          git config --global user.name "Molham Al Nasr"
+          git config --global user.email "dr.molham93@gmail.com"
 
-    - name: Get Version from Tag
-      id: get_version
-      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Determine version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-    - name: Clone Repository
-      run: git clone . "x735-script-${{ steps.get_version.outputs.VERSION }}"
+      - name: Clone repository to package directory
+        run: |
+          mkdir "x735-script-${VERSION}"
+          cp -a . "x735-script-${VERSION}"
 
-    - name: Set Version in DEBIAN/control
-      run: 'sed -i "s/^Version:.*/Version: ${{ steps.get_version.outputs.VERSION }}/g" "x735-script-${{ steps.get_version.outputs.VERSION }}/DEBIAN/control"'
+      - name: Set version in DEBIAN/control file
+        run: |
+          sed -i "s/^Version:.*$/Version: ${VERSION}/" "x735-script-${VERSION}/DEBIAN/control"
 
-    - name: Install dpkg
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y dpkg
+      - name: Install dpkg and dependencies
+        run: sudo apt-get -y install dpkg-dev
 
-    - name: Build Debian Package
-      run: sudo dpkg-deb --build "x735-script-${{ steps.get_version.outputs.VERSION }}"
+      - name: Build Debian package
+        run: sudo dpkg-deb --build "x735-script-${VERSION}"
 
-    - name: Save Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: x735-script-package
-        path: "x735-script-${{ steps.get_version.outputs.VERSION }}.deb"
+      - name: Archive Debian package
+        run: mv "x735-script-${VERSION}.deb" "x735-script-${VERSION}.deb"
+
+      - name: Save Debian package as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: x735-script-${VERSION}.deb
+          path: x735-script-${VERSION}.deb
