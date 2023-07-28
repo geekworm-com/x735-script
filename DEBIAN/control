@@ -8,6 +8,7 @@ Architecture: all
 Build-Depends: debhelper (>= 12)
 Standards-Version: 4.5.1
 Homepage: https://github.com/molhamalnasr/x735-script
+Source: x735-script
 Files:
  /usr/bin/x735off
  /usr/lib/x735-script/x735-fan.sh
