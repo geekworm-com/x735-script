@@ -67,10 +67,11 @@ sed -i "${last_directive_line_number} a ${LINE_TO_ADD}" "${CONFIG_FILE}"
 # Enable and start the services after package installation
 echo "enabling and starting the services..."
 if [ -x /bin/systemctl ]; then
-    systemctl enable x735-fan.service
-    systemctl enable x735-pwr.service
-    systemctl start x735-fan.service
-    systemctl start x735-pwr.service
+  systemctl daemon-reload
+  systemctl enable x735-fan.service
+  systemctl enable x735-pwr.service
+  systemctl start x735-fan.service
+  systemctl start x735-pwr.service
 fi
 
 exit 0
