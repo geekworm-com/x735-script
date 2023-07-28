@@ -3,7 +3,7 @@ Description=Run Hardware Power Management & Safe Shutdown daemon
 
 [Service]
 Type=simple
-ExecStart=/usr/lib/x735-script/x735-pwr.sh
+ExecStart=/usr/lib/x735-script/scripts/x735-pwr.sh
 Restart=always
 
 [Install]
