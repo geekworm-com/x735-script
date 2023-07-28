@@ -11,3 +11,10 @@ Architecture: all
 Depends: ${misc:Depends}
 Description: Safe shutdown script and fan control for the x735 fan board from geekworm
  This package contains a safe shutdown script and fan control for the x735 fan board.
+
+Files:
+ /usr/bin/x735off
+ /usr/lib/x735-script/x735-fan.sh
+ /usr/lib/x735-script/x735-pwr.sh
+ /lib/systemd/system/x735-fan.service
+ /lib/systemd/system/x735-pwr.service
