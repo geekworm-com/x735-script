@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 readonly SHUTDOWN=5
 readonly BOOT=12
 readonly GPIO_PATH="/sys/class/gpio"
@@ -83,14 +85,14 @@ __main__() {
         local elapsed_time=$((current_time - pulse_start))
         if [ "$elapsed_time" -gt "$REBOOT_PULSE_MAXIMUM" ]; then
           echo "Your device is shutting down (GPIO $SHUTDOWN), halting RPi ..."
-          #sudo poweroff
+          sudo poweroff
           exit
         fi
         shutdown_signal="$(get_gpio_value ${SHUTDOWN})"
       done
       if [ "$elapsed_time" -gt "$REBOOT_PULSE_MINIMUM" ]; then
         echo "Your device is rebooting (GPIO $SHUTDOWN), recycling RPi ..."
-        #sudo reboot
+        sudo reboot
         exit
       fi
     fi
