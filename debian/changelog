@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export DEBFULLNAME="Molham Al Nasr"
 export DEBEMAIL="dr.molham93@gmail.com"
 dch --create -v 3.0-1 --package x735-script "Initial release."
