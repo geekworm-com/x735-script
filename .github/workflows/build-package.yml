@@ -3,7 +3,7 @@ name: Build and Package Fan Board Script
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   build_and_package:
@@ -21,7 +21,7 @@ jobs:
       - name: Set up Environment Variables
         run: |
           # Set the 'tag_name' environment variable
-          echo "tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/||p')" >> $GITHUB_ENV
+          echo "tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')" >> $GITHUB_ENV
 
       - name: Build and Package Script
         run: |
