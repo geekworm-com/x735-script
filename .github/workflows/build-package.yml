@@ -16,7 +16,8 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Install any necessary dependencies for building your script here"
-          sudo apt-get update && sudo apt-get install -y dpkg
+          sudo apt update && sudo apt upgrade -y
+          sudo apt install -y dpkg
           sudo apt --fix-broken install
 
       - name: Set up Environment Variables
