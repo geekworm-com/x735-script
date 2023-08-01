@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "Install any necessary dependencies for building your script here"
           sudo apt update && sudo apt upgrade -y
-          sudo apt install -y dpkg
+          sudo apt install -y dpkg build-essential qemu-user-static
           sudo apt --fix-broken install
 
       - name: Set up Environment Variables
@@ -30,8 +30,11 @@ jobs:
           echo "Granting permissions"
           find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
 
+          # Install QEMU for ARM64
+          sudo update-binfmts --enable qemu-aarch64
+
           echo "Build the script package"
-          sudo dpkg-deb --build x735-script-pkg
+          sudo qemu-aarch64-static dpkg-deb --build x735-script-pkg
 
           # Use the 'tag_name' environment variable to rename the binary
           mv x735-script-pkg.deb x735-script-${{ env.tag_name }}.deb
