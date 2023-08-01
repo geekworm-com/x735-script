@@ -18,22 +18,27 @@ jobs:
           echo "Install any necessary dependencies for building your script here"
           sudo apt-get update && sudo apt-get install -y dpkg
 
+      - name: Set up Environment Variables
+        run: |
+          # Set the 'tag_name' environment variable
+          echo "tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/||p')" >> $GITHUB_ENV
+
       - name: Build and Package Script
         run: |
-          echo "Granting permessions"
+          echo "Granting permissions"
           find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
 
           echo "Build the script package"
           dpkg-deb --build x735-script-pkg
 
-          tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/||p')
-          mv x735-script-pkg.deb x735-script-${tag_name}.deb
+          # Use the 'tag_name' environment variable to rename the binary
+          mv x735-script-pkg.deb x735-script-${{ env.tag_name }}.deb
 
       - name: Save Artifact
         uses: actions/upload-artifact@v2
         with:
           name: x735-script-artifacts
-          path: x735-script-${tag_name}.deb
+          path: x735-script-${{ env.tag_name }}.deb
 
       - name: Create Release
         id: create_release
@@ -55,6 +60,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: x735-script-${tag_name}.deb
-          asset_name: x735-script-${tag_name}.deb
+          asset_path: x735-script-${{ env.tag_name }}.deb
+          asset_name: x735-script-${{ env.tag_name }}.deb
           asset_content_type: application/octet-stream
