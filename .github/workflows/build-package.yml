@@ -20,6 +20,9 @@ jobs:
 
       - name: Build and Package Script
         run: |
+          echo "Granting permessions"
+          find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
+
           echo "Build the script package"
           dpkg-deb --build x735-script-pkg
 
