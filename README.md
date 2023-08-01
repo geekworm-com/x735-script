@@ -56,7 +56,14 @@ sudo dpkg -I x735-script-pkg.deb
 ```
 
 ## Release Information for Developers
-For developers, please note that a new release will be automatically created when you create a new tag starting with the letter "v," for example: v3.0.1. The Github Actions file will be triggered, and it will build a new release and upload it as an artifact to Github. The release will be available under: [https://github.com/molhamalnasr/x735-script/releases/latest](https://github.com/molhamalnasr/x735-script/releases/latest).
+For developers, please note the following steps to set up the necessary configurations for automated releases:
+
+1. Generate a "Personal Access Token" in your Github account settings with the required permissions. Make sure to grant the "repo" scope to enable access for repository-related actions and name it `CREATE_RELEASE_TOKEN`.
+2. Add this generated token to the repository's variable settings as a "Repository secret" named GITHUB_TOKEN.
+
+These steps are essential for enabling the Github Actions workflow to create automated releases when you tag the repository with a version starting with the letter "v," for example: v3.0.1. The "GITHUB_TOKEN" repository secret will be used by the workflow to build a new release and upload it as an artifact to Github. The release will be available under: https://github.com/molhamalnasr/x735-script/releases/latest.
+
+By following these instructions, you ensure a streamlined process for managing releases and promoting collaboration among developers in the project.
 
 ## User Guide
 For detailed instructions on how to use the "x735-script" and leverage its features, please refer to the official User Guide available at:
