@@ -16,9 +16,12 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Install any necessary dependencies for building your script here"
-          sudo apt update && sudo apt upgrade -y
-          sudo apt install -y dpkg build-essential qemu-user-static
+          sudo apt update && sudo apt install -y dpkg qemu-user-static
           sudo apt --fix-broken install
+
+      - name: Set up QEMU for arm64
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
       - name: Set up Environment Variables
         run: |
@@ -30,11 +33,9 @@ jobs:
           echo "Granting permissions"
           find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
 
-          # Install QEMU for ARM64
-          sudo update-binfmts --enable qemu-aarch64
-
           echo "Build the script package"
-          sudo qemu-aarch64-static dpkg-deb --build x735-script-pkg
+          sudo docker run --rm -v $PWD:/pkg multiarch/debian-debootstrap:arm64 \
+          dpkg-deb --build /pkg/x735-script-pkg
 
           # Use the 'tag_name' environment variable to rename the binary
           mv x735-script-pkg.deb x735-script-${{ env.tag_name }}.deb
