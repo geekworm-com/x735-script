@@ -35,7 +35,7 @@ jobs:
 
           # Use the 'tag_name' environment variable to rename the binary
           mv x735-script-pkg.deb x735-script-${{ env.tag_name }}.deb
-          chmod +x x735-script-${{ env.tag_name }}.deb
+          sudo chmod +x x735-script-${{ env.tag_name }}.deb
           ls -lah
 
       - name: Save Artifact
