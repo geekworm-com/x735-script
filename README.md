@@ -2,58 +2,68 @@
 The "x735-script" is a Bash script designed to manage the x735 Power Management and Cooling Expansion Board (HAT) for Raspberry Pi 3 and 4. This script enables the user to control various features of the x735 board, including restarting or shutting down the Raspberry Pi using a physical button on the x735 board. Additionally, it uses the PWM pin to control the speed of the fan based on the CPU temperature, providing efficient cooling.
 
 ## Features
-* Control over GPIO pins to activate the restart and shutdown button on the x735 board.
-* Dynamic fan speed control based on the CPU temperature for optimal cooling.
-* Automatic installation of the `x735off` command, enabling safe shutdown of the Raspberry Pi with the x735 HAT.
-Installation
-* Before installing the "x735-script," make sure you have the necessary tools and packages. The script requires the dpkg-deb package, which is commonly used for handling Debian packages.
+Control over GPIO pins to activate the restart and shutdown button on the x735 board.
+Dynamic fan speed control based on the CPU temperature for optimal cooling.
+Automatic installation of the x735off command, enabling safe shutdown of the Raspberry Pi with the x735 HAT.
 
-### Installing dpkg-deb and Dependencies
-If you don't have the `dpkg-deb` package and its dependencies installed, follow these steps:
+## Installation
+To install the "x735-script," follow these steps:
 
-1. Open a terminal on your Raspberry Pi.
-
-2. Update the package list and install the required packages:
-
-    ``` BASH
-    sudo apt update && sudo apt install dpkg-dev -y
+- Download the latest version of the package
+    ``` bash
+    curl -LO https://github.com/molhamalnasr/x735-script/releases/download/3.0.0/x735-script-3.0.0.deb
     ```
 
-### Cloning the Repository and Building the Package
-Now, let's proceed with installing the "x735-script" package:
-
-1. Clone the Git repository containing the "x735-script" code and Change your current directory:
-
-    ``` BASH
-    git clone https://github.com/your-username/x735-script.git && cd x735-script
+- Install the package:
+    ``` bash
+    sudo dpkg -i x735-script-3.0.0.deb
     ```
 
-2. Build the Debian package using dpkg-deb:
-
-    ``` BASH
-    sudo dpkg-deb --build x735-script-pkg
+- Reboot the device:
+    ``` bash
+    sudo reboot
     ```
 
-3. Installing the Package
+## Developer's Guide
+If you are a developer and want to contribute to the "x735-script" or perform further development, follow these steps:
 
-    Once the Debian package is built, you can install it using the following command:
-    ``` BASH
-    sudo dpkg -i x735-script-pkg.deb
+- Install the necessary dependencies:
+    ``` bash
+    sudo apt-get update && sudo apt-get install -y dpkg
     ```
 
-## Verifying Package Content
+- Clone the repository and change to the project directory:
+    ``` bash
+    git clone https://github.com/molhamalnasr/x735-script && cd x735-script
+    ```
+
+- Grant necessary permissions:
+    ``` bash
+    chmod +x x735-script-pkg/usr/bin/x735off
+    chmod +x x735-script-pkg/usr/lib/x735-script/scripts/*.sh
+    find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
+    ```
+
+- Build and test the package:
+    ``` bash
+    dpkg-deb --build x735-script-pkg
+    ```
+
 You can verify the content and installation information of the "x735-script" package with the following command:
 
-``` BASH
+``` bash
 sudo dpkg -I x735-script-pkg.deb
 ```
+
+## Release Information for Developers
+For developers, please note that a new release will be automatically created when you create a new tag starting with the letter "v," for example: v3.0.1. The Github Actions file will be triggered, and it will build a new release and upload it as an artifact to Github. The release will be available under: [https://github.com/molhamalnasr/x735-script/releases/latest](https://github.com/molhamalnasr/x735-script/releases/latest).
 
 ## User Guide
 For detailed instructions on how to use the "x735-script" and leverage its features, please refer to the official User Guide available at:
 
 [https://wiki.geekworm.com/X735-script](https://wiki.geekworm.com/X735-script)
 
-Contact
+#### Contact
 For any questions, issues, or support related to the "x735-script," you can reach out to the development team at:
 
 Email: [support@geekworm.com](mailto:support@geekworm.com)
