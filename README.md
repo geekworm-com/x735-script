@@ -59,7 +59,7 @@ sudo dpkg -I x735-script-pkg.deb
 For developers, please note the following steps to set up the necessary configurations for automated releases:
 
 1. Generate a "Personal Access Token" in your Github account settings with the required permissions. Make sure to grant the "repo" scope to enable access for repository-related actions and name it `CREATE_RELEASE_TOKEN`.
-2. Add this generated token to the repository's variable settings as a "Repository secret" named GITHUB_TOKEN.
+2. Add this generated token to the repository's variable settings as a "Repository secret" named `CREATE_RELEASE_TOKEN`.
 
 These steps are essential for enabling the Github Actions workflow to create automated releases when you tag the repository with a version starting with the letter "v," for example: v3.0.1. The "GITHUB_TOKEN" repository secret will be used by the workflow to build a new release and upload it as an artifact to Github. The release will be available under: https://github.com/molhamalnasr/x735-script/releases/latest.
 
