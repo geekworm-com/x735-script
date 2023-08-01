@@ -17,6 +17,7 @@ jobs:
         run: |
           echo "Install any necessary dependencies for building your script here"
           sudo apt-get update && sudo apt-get install -y dpkg
+          sudo apt --fix-broken install
 
       - name: Set up Environment Variables
         run: |
@@ -27,16 +28,12 @@ jobs:
         run: |
           echo "Granting permissions"
           find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
-          ls -lah
 
           echo "Build the script package"
           sudo dpkg-deb --build x735-script-pkg
-          ls -lah
 
           # Use the 'tag_name' environment variable to rename the binary
           mv x735-script-pkg.deb x735-script-${{ env.tag_name }}.deb
-          sudo chmod +x x735-script-${{ env.tag_name }}.deb
-          ls -lah
 
       - name: Save Artifact
         uses: actions/upload-artifact@v2
