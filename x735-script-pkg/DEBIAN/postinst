@@ -74,8 +74,9 @@ if [ -x /bin/systemctl ]; then
   systemctl daemon-reload
   systemctl enable x735-fan.service
   systemctl enable x735-pwr.service
-  systemctl start x735-fan.service
-  systemctl start x735-pwr.service
 fi
+
+echo -e "\033[31mPlease restart the device by running the following command:\033[0m"
+echo -e "\t`sudo reboot`"
 
 exit 0
