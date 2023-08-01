@@ -1,0 +1,57 @@
+name: Build and Package Fan Board Script
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build_and_package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: |
+          echo "Install any necessary dependencies for building your script here"
+          sudo apt-get update && sudo apt-get install -y dpkg
+
+      - name: Build and Package Script
+        run: |
+          echo "Build the script package"
+          dpkg-deb --build x735-script-pkg
+
+          tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/||p')
+          mv x735-script-pkg.deb x735-script-${tag_name}.deb
+
+      - name: Save Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: x735-script-artifacts
+          path: x735-script-${tag_name}.deb
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Artifact
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: x735-script-${tag_name}.deb
+          asset_name: x735-script-${tag_name}.deb
+          asset_content_type: application/octet-stream
