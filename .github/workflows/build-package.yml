@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+env:
+  GITHUB_WORKFLOW: ${GITHUB_WORKSPACE}/.github/workflows
+
 jobs:
   build_and_package:
     runs-on: ubuntu-latest
@@ -36,7 +39,7 @@ jobs:
       - name: Build different ARCH Versions
         run: |
           # Run the create-version.sh script to build different versions
-          /bin/bash ${GITHUB_WORKSPACE}/bin/create-version.sh "$PWD" "${{ env.tag_name }}"
+          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/create-version.sh "$PWD" "${{ env.tag_name }}"
 
       - name: Save Artifact
         uses: actions/upload-artifact@v2
@@ -69,5 +72,5 @@ jobs:
         run: |
           # Add a loop to upload each artifact
           for artifact in versions/x735-script_*.deb; do
-            /bin/bash ${GITHUB_WORKSPACE}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
+            /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
           done
