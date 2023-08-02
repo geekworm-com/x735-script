@@ -1,9 +1,8 @@
 #!/bin/bash
 
-readonly LINE_TO_DEL="dtoverlay=pwm-2chan,pin2=13,func2=4"
 readonly CONFIG_FILE="/boot/config.txt"
 
-sed -n "/^\[all\]/,/\[.*\]/ s/^${LINE_TO_DEL}//" "${CONFIG_FILE}"
+sudo sed -i '/^\[all\]$/,/^\[.*\]$/ s/dtoverlay=pwm-2chan,pin2=13,func2=4$//' "${CONFIG_FILE}"
 
 echo -e "\033[31mPlease restart the device by running the following command:\033[0m"
 echo -e "\t'sudo reboot'"
