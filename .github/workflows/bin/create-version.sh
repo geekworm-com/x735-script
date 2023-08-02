@@ -6,6 +6,8 @@ readonly PACKAGE_PATH="$1"
 readonly PACKAGE_VERSION="$2"
 declare -a ARCH_LIST=("arm64" "armhf")
 
+echo "${PACKAGE_PATH}"
+echo "${PWD}"
 # Create the "versions" directory if it doesn't exist
 mkdir -p ${PACKAGE_PATH}/versions
 
