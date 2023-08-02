@@ -10,12 +10,15 @@ upload_artifact() {
 
   filename=$(basename "$artifact_path")
   echo "Uploading $filename..."
-  curl \
+
+    curl -L \
     -X POST \
-    --data-binary @"$artifact_path" \
-    -H "Authorization: Bearer $token" \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer ${token}" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
     -H "Content-Type: application/octet-stream" \
-    "$upload_url?name=$filename"
+    "$upload_url=$filename" \
+    --data-binary "@${artifact_path}"
 }
 
 # Main script starts here
