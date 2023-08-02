@@ -72,5 +72,6 @@ jobs:
         run: |
           # Add a loop to upload each artifact
           for artifact in ${GITHUB_WORKSPACE}/versions/x735-script_*.deb; do
-            /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
+            echo "$artifact"
+            #/bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
           done
