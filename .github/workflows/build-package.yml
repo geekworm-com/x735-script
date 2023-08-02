@@ -60,18 +60,9 @@ jobs:
           draft: false
           prerelease: false
       
-      - name: Upload Release Artifact
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-      
       - name: Upload Artifacts to Release
         run: |
           # Add a loop to upload each artifact
           for artifact in ${GITHUB_WORKSPACE}/versions/x735-script_*.deb; do
-            echo "$artifact"
-            #/bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
+            /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
           done
