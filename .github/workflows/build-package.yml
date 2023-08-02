@@ -33,20 +33,16 @@ jobs:
           # Grant execute permission to all files in DEBIAN directory, but the compat file
           find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
       
-      - name: Bild arm64-bullseye Version
+      - name: Bild different ARCH Versions
         run: |
           # run arm64-bullseye docker image and build the package in the mounted dirctory
-          sudo docker run --rm -v $PWD:/pkg multiarch/debian-debootstrap:arm64-bullseye \
-          dpkg-deb --build /pkg/x735-script-pkg
-
-          # Use a conventional name for the package
-          mv x735-script-pkg.deb x735-script_${{ env.tag_name }}_arm64.deb
+          /bin/bash ${GITHUB_WORKSPACE}/bin/create-version.sh "$PWD" "${{ env.tag_name }}"
 
       - name: Save Artifact
         uses: actions/upload-artifact@v2
         with:
           name: x735-script-artifacts
-          path: x735-script_${{ env.tag_name }}_arm64.deb
+          path: versions/x735-script_*.deb
 
       - name: Create Release
         id: create_release
@@ -60,7 +56,7 @@ jobs:
             Release ${{ github.ref }}
           draft: false
           prerelease: false
-
+      
       - name: Upload Release Artifact
         id: upload_release_asset
         uses: actions/upload-release-asset@v1
@@ -68,6 +64,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: x735-script_${{ env.tag_name }}_arm64.deb
-          asset_name: x735-script_${{ env.tag_name }}_arm64.deb
-          asset_content_type: application/octet-stream
+      
+      - name: Upload Artifacts to Release
+        run: |
+          # Add a loop to upload each artifact
+          for artifact in versions/x735-script_*.deb; do
+            /bin/bash ${GITHUB_WORKSPACE}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
+          done
