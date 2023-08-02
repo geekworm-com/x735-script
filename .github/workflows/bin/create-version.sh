@@ -7,7 +7,7 @@ readonly PACKAGE_VERSION="$2"
 declare -a ARCH_LIST=("arm64" "armhf")
 
 # Create the "versions" directory if it doesn't exist
-mkdir -p versions
+mkdir -p ${PACKAGE_PATH}/versions
 
 for arch_type in "${ARCH_LIST[@]}"; do
     # Run docker image and build the package in the mounted directory
