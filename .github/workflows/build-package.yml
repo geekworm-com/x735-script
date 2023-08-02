@@ -33,9 +33,9 @@ jobs:
           # Grant execute permission to all files in DEBIAN directory, but the compat file
           find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
       
-      - name: Bild different ARCH Versions
+      - name: Build different ARCH Versions
         run: |
-          # run arm64-bullseye docker image and build the package in the mounted dirctory
+          # Run the create-version.sh script to build different versions
           /bin/bash ${GITHUB_WORKSPACE}/bin/create-version.sh "$PWD" "${{ env.tag_name }}"
 
       - name: Save Artifact
