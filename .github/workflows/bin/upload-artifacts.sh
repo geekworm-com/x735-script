@@ -2,6 +2,16 @@
 
 set -e
 
+readonly CLI_ARGS_ERROR="151"
+readonly FILE_NOT_EXIST="152"
+
+terminate() {
+    local -r msg=$1
+    local -r err_code=${2:-150}
+    echo "${msg}" >&2
+    exit "${err_code}"
+}
+
 # Function to upload an artifact to the release
 upload_artifact() {
   local artifact_path=$1
@@ -23,8 +33,7 @@ upload_artifact() {
 
 # Main script starts here
 if [ $# -lt 3 ]; then
-  echo "Usage: $0 <artifact_path> <upload_url> <token>"
-  exit 1
+  terminate "Usage: $0 <artifact_path> <upload_url> <token>" "${CLI_ARGS_ERROR}"
 fi
 
 artifact_path=$1
@@ -33,8 +42,7 @@ token=$3
 
 # Check if the artifact path exists
 if [ ! -f "$artifact_path" ]; then
-  echo "Artifact file not found: $artifact_path"
-  exit 1
+  terminate "Artifact file not found: ${artifact_path}" "${FILE_NOT_EXIST}"
 fi
 
 upload_artifact "$artifact_path" "$upload_url" "$token"
