@@ -2,8 +2,8 @@
 
 set -e
 
-readonly CLI_ARGS_ERROR="151"
 readonly FILE_NOT_EXIST="152"
+readonly INVALID_CLI_ARG_COUNT="154"
 
 terminate() {
     local -r msg=$1
@@ -33,7 +33,7 @@ upload_artifact() {
 
 # Main script starts here
 if [ $# -lt 3 ]; then
-  terminate "Usage: $0 <artifact_path> <upload_url> <token>" "${CLI_ARGS_ERROR}"
+  terminate "Usage: $0 <artifact_path> <upload_url> <token>" "${INVALID_CLI_ARG_COUNT}"
 fi
 
 artifact_path=$1
