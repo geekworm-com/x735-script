@@ -34,7 +34,7 @@ jobs:
           echo "::set-output name=tag_name::$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')"
           
       - name: Update and Commit Changelog
-        run: /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/update_changelog.sh "${GITHUB_WORKSPACE}" "${{ steps.update_repo_settings.outputs.changelog_msg }}"
+        run: /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/update_changelog.sh "${{ env.PACKAGE_DEBIAN }}/changelog" "${{ steps.update_repo_settings.outputs.changelog_msg }}"
 
       - name: Update Version
         run: |
