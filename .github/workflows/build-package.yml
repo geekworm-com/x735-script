@@ -32,7 +32,6 @@ jobs:
           
           # changelog message gonna be in this case the last commit message where the tag is created.
           echo "::set-output name=changelog_msg::$(git log -1 --pretty=%B)"
-          echo "::set-output name=full_tag_name::$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/||p')"
           echo "::set-output name=tag_name::$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')"
           
       - name: Update and Commit Changelog
@@ -41,24 +40,20 @@ jobs:
           export DEBEMAIL="${{ env.USER_EMAIL }}"
           /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/update_changelog.sh "${{ env.PACKAGE_DEBIAN }}/changelog" "${{ steps.update_repo_settings.outputs.changelog_msg }}" "${{ steps.update_repo_settings.outputs.tag_name }}"
 
-      - name: Update Version and commit changes
+      - name: Update Version
         run: |
           sed -i '/^Version:.*/ c Version: ${{ steps.update_repo_settings.outputs.tag_name }}' "${{ env.PACKAGE_DEBIAN }}/control"
 
+      - name: Commit Changelog Changes
+        id: commit_changelog
+        run: |
           git add .
           git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
+          # use tempo the branch "packaging-the-script". it should be main later.
+          git push origin packaging-the-script
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.CREATE_RELEASE_TOKEN }}
-          branch: ${{ github.ref }}
-
-      - name: expose commit SHA
-        id: commit_sha
-        run: |
           # Store the commit SHA as an output variable
-          echo "::set-output name=commit_sha::$(git rev-parse HEAD)"
+          echo "::set-output name=update_repo_sha::$(git rev-parse HEAD)"
 
 
 
@@ -70,7 +65,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
         with:
-          ref: ${{ needs.commit_sha.outputs.commit_sha }}  # Use the commit_sha output from the previous job
+          ref: ${{ needs.commit_changelog.outputs.update_repo_sha }}  # Use the update_repo_sha output from the previous job
 
       - name: Install Dependencies
         run: |
