@@ -7,9 +7,11 @@ on:
 
 env:
   GITHUB_WORKFLOW: ${GITHUB_WORKSPACE}/.github/workflows
+  PACKAGE_DEBIAN: ${GITHUB_WORKSPACE}/x735-script-pkg/DEBIAN
+  FULL_TAG_NAME: ${{ github.ref }}
 
 jobs:
-  build_and_package:
+  update_repo:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,28 +20,66 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          # Install any necessary dependencies for modifing the repository
+          sudo apt update && sudo apt install -y devscripts
+      
+      - name: Set up Environment
+        id: update_repo_settings
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # changelog message gonna be in this case the last commit message where the tag is created.
+          echo "::set-output name=changelog_msg::$(git log -1 --pretty=%B)"
+          echo "::set-output name=tag_name::$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')"
+          
+      - name: Update and Commit Changelog
+        run: /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/update_changelog.sh "${GITHUB_WORKSPACE}" "${{ steps.update_repo_settings.outputs.changelog_msg }}"
+
+      - name: Update Version
+        run: |
+          sed -i '/^Version:.*/ c Version: ${{ steps.update_repo_settings.outputs.tag_name }}' "${{ env.PACKAGE_DEBIAN }}/control"
+
+      - name: Commit Changelog Changes
+        id: commit_changelog
+        run: |
+          git add .
+          git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
+          git push
+
+          # Store the commit SHA as an output variable
+          echo "::set-output name=update_repo_sha::$(git rev-parse HEAD)"
+
+
+
+  build_and_package:
+    runs-on: ubuntu-latest
+    needs: update_repo
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.commit_changelog.outputs.update_repo_sha }}  # Use the update_repo_sha output from the previous job
+
+      - name: Install Dependencies
+        run: |
           echo "Install any necessary dependencies for building your script here"
           sudo apt update && sudo apt install -y dpkg qemu-user-static
-          sudo apt --fix-broken install
 
       - name: Set up QEMU for arm64
         run: |
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
-      - name: Set up Environment Variables
-        run: |
-          # Set the 'tag_name' environment variable
-          echo "tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')" >> $GITHUB_ENV
-
       - name: Granting Permissions
         run: |
           # Grant execute permission to all files in DEBIAN directory, but the compat file
-          find x735-script-pkg/DEBIAN -type f ! -name 'compat' -exec chmod +x {} \;
+          find ${{ env.PACKAGE_DEBIAN }} -type f ! -name 'compat' -exec chmod +x {} \;
       
       - name: Build different ARCH Versions
         run: |
           # Run the create-version.sh script to build different versions
-          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/create-version.sh "${GITHUB_WORKSPACE}" "${{ env.tag_name }}"
+          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/create-version.sh "${GITHUB_WORKSPACE}" "${{ env.PACKAGE_DEBIAN }}/control" "${{ needs.update_repo_settings.outputs.tag_name }}"
 
       - name: Save Artifact
         uses: actions/upload-artifact@v2
