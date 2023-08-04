@@ -9,8 +9,8 @@ env:
   GITHUB_WORKFLOW: ${GITHUB_WORKSPACE}/.github/workflows
   PACKAGE_DEBIAN: ${GITHUB_WORKSPACE}/x735-script-pkg/DEBIAN
   FULL_TAG_NAME: ${{ github.ref }}
-  USER_NAME: ${{ secrets.user_name }}
-  USER_EMAIL: ${{ secrets.user_email }}
+  USER_NAME: ${{ secrets.USER_NAME }}
+  USER_EMAIL: ${{ secrets.USER_EMAIL }}
 
 jobs:
   update_repo:
