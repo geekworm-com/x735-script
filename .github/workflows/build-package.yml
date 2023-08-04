@@ -50,7 +50,7 @@ jobs:
           git add .
           git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
           # use tempo the branch "packaging-the-script". it should be main later.
-          git push origin packaging-the-script
+          git push --follow-tags origin HEAD:${GITHUB_REF}
 
           # Store the commit SHA as an output variable
           echo "::set-output name=update_repo_sha::$(git rev-parse HEAD)"
