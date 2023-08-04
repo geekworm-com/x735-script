@@ -50,7 +50,7 @@ jobs:
         run: |
           git add .
           git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
-          git push origin "${{ steps.update_repo_settings.outputs.full_tag_name }}"
+          git push https://${{ secrets.CREATE_RELEASE_TOKEN }}@github.com/${{ github.repository }} ${{ steps.update_repo_settings.outputs.full_tag_name }}
 
           # Store the commit SHA as an output variable
           echo "::set-output name=update_repo_sha::$(git rev-parse HEAD)"
