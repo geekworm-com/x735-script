@@ -8,7 +8,6 @@ on:
 env:
   GITHUB_WORKFLOW: ${GITHUB_WORKSPACE}/.github/workflows
   PACKAGE_DEBIAN: ${GITHUB_WORKSPACE}/x735-script-pkg/DEBIAN
-  FULL_TAG_NAME: ${{ github.ref }}
   USER_NAME: ${{ vars.USER_NAME }}
   USER_EMAIL: ${{ vars.USER_EMAIL }}
 
@@ -33,6 +32,7 @@ jobs:
           
           # changelog message gonna be in this case the last commit message where the tag is created.
           echo "::set-output name=changelog_msg::$(git log -1 --pretty=%B)"
+          echo "::set-output name=full_tag_name::$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/||p')"
           echo "::set-output name=tag_name::$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')"
           
       - name: Update and Commit Changelog
@@ -50,7 +50,7 @@ jobs:
         run: |
           git add .
           git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
-          git push
+          git push origin "${{ steps.update_repo_settings.outputs.full_tag_name }}"
 
           # Store the commit SHA as an output variable
           echo "::set-output name=update_repo_sha::$(git rev-parse HEAD)"
