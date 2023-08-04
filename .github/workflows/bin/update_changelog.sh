@@ -4,6 +4,7 @@ set -e
 
 readonly CHANGELOG_PATH="$1"
 readonly CHANGELOG_MSG="$2"
+readonly VERSION="$3"
 
 readonly INVALID_CLI_ARG_COUNT="154"
 
@@ -29,9 +30,9 @@ create_or_append_changelog() {
     local message=$1
 
     if changelog_exists; then
-        dch --append --changelog "${CHANGELOG_PATH}" -- "$message"
+        dch --package x735-script --newversion "${VERSION}" --append --changelog "${CHANGELOG_PATH}" -- "$message"
     else
-        dch --create --changelog "${CHANGELOG_PATH}" -- "Initial Release."
+        dch --package x735-script --newversion "${VERSION}" --create --changelog "${CHANGELOG_PATH}" -- "Initial Release."
     fi
 }
 

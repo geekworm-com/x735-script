@@ -39,7 +39,7 @@ jobs:
         run: |
           export DEBFULLNAME="${{ env.USER_NAME }}"
           export DEBEMAIL="${{ env.USER_EMAIL }}"
-          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/update_changelog.sh "${{ env.PACKAGE_DEBIAN }}/changelog" "${{ steps.update_repo_settings.outputs.changelog_msg }}"
+          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/update_changelog.sh "${{ env.PACKAGE_DEBIAN }}/changelog" "${{ steps.update_repo_settings.outputs.changelog_msg }}" "${{ steps.update_repo_settings.outputs.tag_name }}"
 
       - name: Update Version
         run: |
