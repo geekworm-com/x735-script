@@ -49,7 +49,8 @@ jobs:
         run: |
           git add .
           git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
-          # use tempo the branch "packaging-the-script". it should be main later.
+          git remote set-url origin "https://${{ github.actor }}:${{ secrets.CREATE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git"
+
           git push --follow-tags origin HEAD:${GITHUB_REF}
 
           # Store the commit SHA as an output variable
