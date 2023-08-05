@@ -70,7 +70,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
         with:
-          ref: ${{ needs.commit_changelog.outputs.update_repo_sha }}  # Use the update_repo_sha output from the previous job
+          ref: ${{ needs.update_repo.outputs.update_repo_sha }}  # Use the update_repo_sha output from the previous job
 
       - name: Install Dependencies
         run: |
@@ -89,7 +89,7 @@ jobs:
       - name: Build different ARCH Versions
         run: |
           # Run the create-version.sh script to build different versions
-          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/create-version.sh "${GITHUB_WORKSPACE}" "${{ env.PACKAGE_DEBIAN }}/control" "${{ needs.update_repo_settings.outputs.tag_name }}"
+          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/create-version.sh "${GITHUB_WORKSPACE}" "${{ env.PACKAGE_DEBIAN }}/control" "${{ needs.update_repo.outputs.tag_name }}"
 
       - name: Save Artifact
         uses: actions/upload-artifact@v2
