@@ -19,6 +19,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
         with:
+          ref: packaging-the-script
           token: ${{ secrets.CREATE_RELEASE_TOKEN }}
 
       - name: Install Dependencies
