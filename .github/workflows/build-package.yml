@@ -30,13 +30,12 @@ jobs:
       - name: Set up Environment
         id: update_repo_settings
         run: |
-          git remote get-url --push origin
           git config --local user.name "${{ env.USER_NAME }}"
           git config --local user.email "${{ env.USER_EMAIL }}"
           
           # changelog message gonna be in this case the last commit message where the tag is created.
-          echo "::set-output name=changelog_msg::$(git log -1 --pretty=%B)"
-          echo "::set-output name=tag_name::$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')"
+          echo "changelog_msg=$(git log -1 --pretty=%B)" >> "$GITHUB_OUTPUT"
+          echo "tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')" >> "$GITHUB_OUTPUT"
           
       - name: Update and Commit Changelog
         run: |
@@ -53,13 +52,13 @@ jobs:
         run: |
           git add .
           git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
-          git remote set-url --push origin "https://${{ secrets.CREATE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git"
+          #git remote set-url --push origin "https://${{ secrets.CREATE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git"
 
           # here supposed to be origin main later. now is only for testing.
           git push --follow-tags origin packaging-the-script
 
           # Store the commit SHA as an output variable
-          echo "::set-output name=update_repo_sha::$(git rev-parse HEAD)"
+          echo "update_repo_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
 
 
