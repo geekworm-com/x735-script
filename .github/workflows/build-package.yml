@@ -52,7 +52,7 @@ jobs:
         run: |
           git add .
           git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
-          git remote set-url --push origin "https://${{ secrets.CREATE_RELEASE_TOKEN }}@github.com/${{ github.actor }}/${{ github.repository }}.git"
+          git remote set-url --push origin "https://${{ secrets.CREATE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git"
 
           # here supposed to be origin main later. now is only for testing.
           git push --follow-tags origin packaging-the-script
