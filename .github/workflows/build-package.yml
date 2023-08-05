@@ -60,6 +60,10 @@ jobs:
           # Store the commit SHA as an output variable
           echo "update_repo_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+    outputs:
+      tag_name: ${{ steps.update_repo_settings.outputs.tag_name }}
+      update_repo_sha: ${{ steps.commit_changelog.outputs.update_repo_sha }}
+
 
 
   build_and_package:
