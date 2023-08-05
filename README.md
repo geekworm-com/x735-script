@@ -11,7 +11,7 @@ To install the "x735-script," follow these steps:
 
 - Download the latest version of the package
     ``` bash
-    curl -LO https://github.com/molhamalnasr/x735-script/releases/download/3.0.0/x735-script-3.0.0.deb
+    wget https://github.com/molhamalnasr/x735-script/releases/download/3.0.0/x735-script-3.0.0.deb
     ```
 
 - Install the package:
