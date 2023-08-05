@@ -1,5 +1,6 @@
-x735-script (3.0.0) UNRELEASED; urgency=medium
+x735-script (3.0.1) UNRELEASED; urgency=medium
 
   * Initial Release. [v3.0.0]
+  * change installation command [v3.0.1]
 
- -- Molham Al Nasr <dr.molham93@gmail.com>  Sat, 05 Aug 2023 11:32:55 +0000
+ -- Molham Al Nasr <dr.molham93@gmail.com>  Sat, 05 Aug 2023 18:04:54 +0000
