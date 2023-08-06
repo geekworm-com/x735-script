@@ -1,0 +1,61 @@
+# Fan Control and Power Management Script Release v##TAG_NAME##
+
+We're excited to announce the release of our Fan Control and Power Management Script for Linux Debian on ARM64 and ARMHF architectures! This script allows you to seamlessly control fan speed on your Raspberry Pi and efficiently manage power settings for optimal performance.
+
+## Installation
+
+To get started, follow these simple steps to install the script on your Raspberry Pi:
+
+### 1. Download the Package
+
+For ARM64 architecture, open your terminal and run:
+
+```bash
+wget https://github.com/##GITHUB_REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_arm64.deb
+```
+
+For ARMHF architecture, use:
+
+```bash
+wget https://github.com/##GITHUB_REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_armhf_.deb
+```
+
+### 2. Install the Package
+
+Once the package is downloaded, install it using the following command:
+
+For ARM64 architecture, run:
+
+```bash
+sudo dpkg -i x735-script_##TAG_NAME##_arm64.deb
+```
+
+For ARMHF architecture, use:
+
+```bash
+sudo dpkg -i x735-script_##TAG_NAME##_armhf_.deb
+```
+
+### 3. Reboot Your System
+
+After the installation is complete, it's important to reboot your system for the changes to take effect. Run:
+
+```bash
+sudo reboot
+```
+
+## Usage
+
+Our script offers intuitive fan control and power management features. You can easily adjust fan speed based on your system's temperature and customize power settings to enhance your Raspberry Pi experience.
+
+## Changelog
+
+- **v##TAG_NAME## (##RELEASE_PUBLICH_DATE##):** Initial release
+  - Fan speed control based on temperature thresholds
+  - Power management optimization for efficient performance
+
+## Get Involved
+
+We're committed to continuous improvement and welcome your feedback. If you encounter any issues or have suggestions for enhancements, please [open an issue](https://github.com/##GITHUB_REPO##/issues) on our GitHub repository.
+
+Thank you for choosing our Fan Control and Power Management Script. We hope it enhances your Raspberry Pi usage experience!

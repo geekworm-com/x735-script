@@ -108,9 +108,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: Release Version ${{ needs.update_repo.outputs.tag_name }}
           body: |
-            Release ${{ github.ref }}
+            $(/bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/replace_placeholders.sh "${{ env.GITHUB_WORKFLOW }}/templates/release_template.txt" "${{ needs.update_repo.outputs.tag_name }}"" "${{ github.event.release.published_at }}" "${{ github.repository }}"
           draft: false
           prerelease: false
       
