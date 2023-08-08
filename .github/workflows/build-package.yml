@@ -116,7 +116,7 @@ jobs:
       - name: Upload Artifacts to Release and update Release Note
         run: |
           # Update Release Note
-          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/replace_placeholders.sh \
+          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/create_release_note.sh \
             "${{ env.GITHUB_WORKFLOW }}/templates/release_template.txt" \
             "${{ needs.update_repo.outputs.tag_name }}" \
             "${{ steps.create_release.outputs.published_at }}" \
