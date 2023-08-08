@@ -49,4 +49,4 @@ curl -L \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   "${release_url}" \
-  -d "{\"body\":\"${release_note_text}\""
+  -d "{\"body\":\"${release_note_text//\"/\\\"}\"}"
