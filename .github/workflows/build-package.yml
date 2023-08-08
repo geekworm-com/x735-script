@@ -80,7 +80,7 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Install any necessary dependencies for building your script here"
-          sudo apt update && sudo apt install -y dpkg qemu-user-static
+          sudo apt update && sudo apt install -y dpkg qemu-user-static jq
 
       - name: Set up QEMU for arm64
         run: |
@@ -118,8 +118,6 @@ jobs:
           # Update Release Note
           /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/create_release_note.sh \
             "${{ env.GITHUB_WORKFLOW }}/templates/release_template.txt" \
-            "${{ needs.update_repo.outputs.tag_name }}" \
-            "${{ steps.create_release.outputs.published_at }}" \
             "${{ github.repository }}" \
             "${{ secrets.CREATE_RELEASE_TOKEN }}" \
             "${{ steps.create_release.outputs.id }}" \

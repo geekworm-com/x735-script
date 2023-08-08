@@ -11,13 +11,13 @@ To get started, follow these simple steps to install the script on your Raspberr
 For ARM64 architecture, open your terminal and run:
 
 ```bash
-wget https://github.com/##GITHUB_REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_arm64.deb
+wget https://github.com/##REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_arm64.deb
 ```
 
 For ARMHF architecture, use:
 
 ```bash
-wget https://github.com/##GITHUB_REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_armhf_.deb
+wget https://github.com/##REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_armhf_.deb
 ```
 
 ### 2. Install the Package
@@ -50,11 +50,11 @@ Our script offers intuitive fan control and power management features. You can e
 
 ## Changelog
 
-- **v##TAG_NAME## (##RELEASE_PUBLICH_DATE##):** Initial release
+- **v##TAG_NAME## (##RELEASE_DATE##):** Initial release
   ##MSG##
 
 ## Get Involved
 
-We're committed to continuous improvement and welcome your feedback. If you encounter any issues or have suggestions for enhancements, please [open an issue](https://github.com/##GITHUB_REPO##/issues) on our GitHub repository.
+We're committed to continuous improvement and welcome your feedback. If you encounter any issues or have suggestions for enhancements, please [open an issue](https://github.com/##REPO##/issues) on our GitHub repository.
 
 Thank you for choosing our Fan Control and Power Management Script. We hope it enhances your Raspberry Pi usage experience!
