@@ -63,6 +63,7 @@ jobs:
     outputs:
       tag_name: ${{ steps.update_repo_settings.outputs.tag_name }}
       update_repo_sha: ${{ steps.commit_changelog.outputs.update_repo_sha }}
+      changelog_msg: ${{ steps.update_repo_settings.outputs.changelog_msg }}
 
 
 
@@ -109,13 +110,21 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release Version ${{ needs.update_repo.outputs.tag_name }}
-          body: |
-            $(/bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/replace_placeholders.sh "${{ env.GITHUB_WORKFLOW }}/templates/release_template.txt" "${{ needs.update_repo.outputs.tag_name }}"" "${{ github.event.release.published_at }}" "${{ github.repository }}"
           draft: false
           prerelease: false
       
-      - name: Upload Artifacts to Release
+      - name: Upload Artifacts to Release and update Release Note
         run: |
+          # Update Release Note
+          /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/replace_placeholders.sh \
+            "${{ env.GITHUB_WORKFLOW }}/templates/release_template.txt" \
+            "${{ needs.update_repo.outputs.tag_name }}" \
+            "${{ steps.create_release.outputs.published_at }}" \
+            "${{ github.repository }}" \
+            "${{ secrets.CREATE_RELEASE_TOKEN }}" \
+            "${{ steps.create_release.outputs.id }}" \
+            "${{ needs.update_repo.outputs.changelog_msg }}"
+
           # Add a loop to upload each artifact
           for artifact in ${GITHUB_WORKSPACE}/versions/x735-script_*.deb; do
             /bin/bash ${{ env.GITHUB_WORKFLOW }}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"

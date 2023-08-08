@@ -51,8 +51,7 @@ Our script offers intuitive fan control and power management features. You can e
 ## Changelog
 
 - **v##TAG_NAME## (##RELEASE_PUBLICH_DATE##):** Initial release
-  - Fan speed control based on temperature thresholds
-  - Power management optimization for efficient performance
+  ##MSG##
 
 ## Get Involved
 
