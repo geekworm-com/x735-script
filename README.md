@@ -7,22 +7,15 @@ Dynamic fan speed control based on the CPU temperature for optimal cooling.
 Automatic installation of the x735off command, enabling safe shutdown of the Raspberry Pi with the x735 HAT.
 
 ## Installation
-To install the "x735-script," follow these steps:
+Installing the `x735-script` is a straightforward process. To begin, simply click on the link below to access the latest release:
 
-- Download the latest version of the package
-    ``` bash
-    wget https://github.com/molhamalnasr/x735-script/releases/download/3.0.0/x735-script-3.0.0.deb
-    ```
+**[https://github.com/molhamalnasr/x735-script/releases/latest](https://github.com/actions/create-release/releases/latest)**
 
-- Install the package:
-    ``` bash
-    sudo dpkg -i x735-script-3.0.0.deb
-    ```
+Once you're on the release page, follow the provided instructions to install the script on your Raspberry Pi. The installation process will guide you through the necessary steps to set up the fan speed control and power management features seamlessly.
 
-- Reboot the device:
-    ``` bash
-    sudo reboot
-    ```
+If you prefer to install an older version of the script for compatibility or other reasons, you can do so by clicking on the link below:
+
+**[https://github.com/molhamalnasr/x735-script/releases](https://github.com/actions/create-release/releases)**
 
 ## Developer's Guide
 If you are a developer and want to contribute to the "x735-script" or perform further development, follow these steps:
@@ -60,8 +53,11 @@ For developers, please note the following steps to set up the necessary configur
 
 1. Generate a "Personal Access Token" in your Github account settings with the required permissions. Make sure to grant the "repo" scope to enable access for repository-related actions and name it `CREATE_RELEASE_TOKEN`.
 2. Add this generated token to the repository's variable settings as a "Repository secret" named `CREATE_RELEASE_TOKEN`.
+3. you need another 2 variables as a "Repository variables"
+    - USER_EMAIL="\<YOUR EMAIL\>"
+    - USER_NAME=\<YOUR FULL NAME\>
 
-These steps are essential for enabling the Github Actions workflow to create automated releases when you tag the repository with a version starting with the letter "v," for example: v3.0.1. The "GITHUB_TOKEN" repository secret will be used by the workflow to build a new release and upload it as an artifact to Github. The release will be available under: https://github.com/molhamalnasr/x735-script/releases/latest.
+These steps are essential for enabling the Github Actions workflow to create automated releases when you push a tag starting with the letter "v*" to the main branch. for example: v3.0.1. The "GITHUB_TOKEN" repository secret will be used by the workflow to build a new release and upload it as an artifact to Github. The release will be available under: https://github.com/molhamalnasr/x735-script/releases/latest. and the "USER_EMAIL" and "USER_NAME" are used to create/append the changelog file for the package.
 
 By following these instructions, you ensure a streamlined process for managing releases and promoting collaboration among developers in the project.
 
