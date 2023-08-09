@@ -46,11 +46,30 @@ sudo reboot
 
 ## Usage
 
-Our script offers intuitive fan control and power management features. You can easily adjust fan speed based on your system's temperature and customize power settings to enhance your Raspberry Pi experience.
+This Bash script offers seamless control over your Raspberry Pi's fan speed and power management, ensuring optimal performance while maintaining efficient temperature regulation. With the added convenience of safe shutdown capabilities, you can confidently power down your system using the command:
+
+``` bash
+sudo x735off
+```
+
+To monitor the fan speed and its operational status, simply query the `x735-fan.service` service using the following command:
+
+``` bash
+systemctl status x735-fan.service
+```
+
+Should you wish to take manual control of the fan, you have the flexibility to halt or restart it using the respective commands:
+
+``` bash
+sudo systemctl stop x735-fan.service
+sudo systemctl start x735-fan.service
+```
+
+This script empowers you to fine-tune your Raspberry Pi's performance by automatically adjusting fan speed as needed, ensuring a cool and optimized computing experience. The seamless integration of power management and temperature control provides a comprehensive solution for Raspberry Pi enthusiasts seeking both reliability and performance.
 
 ## Changelog
 
-- **v##TAG_NAME## (##RELEASE_DATE##):** Initial release
+- **v##TAG_NAME## (##RELEASE_DATE##):**
   ##MSG##
 
 ## Get Involved
