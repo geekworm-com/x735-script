@@ -9,13 +9,13 @@ Automatic installation of the x735off command, enabling safe shutdown of the Ras
 ## Installation
 Installing the `x735-script` is a straightforward process. To begin, simply click on the link below to access the latest release:
 
-**[https://github.com/molhamalnasr/x735-script/releases/latest](https://github.com/actions/create-release/releases/latest)**
+**[https://github.com/molhamalnasr/x735-script/releases/latest](https://github.com/molhamalnasr/x735-script/releases/latest)**
 
 Once you're on the release page, follow the provided instructions to install the script on your Raspberry Pi. The installation process will guide you through the necessary steps to set up the fan speed control and power management features seamlessly.
 
 If you prefer to install an older version of the script for compatibility or other reasons, you can do so by clicking on the link below:
 
-**[https://github.com/molhamalnasr/x735-script/releases](https://github.com/actions/create-release/releases)**
+**[https://github.com/molhamalnasr/x735-script/releases](https://github.com/molhamalnasr/x735-script/releases)**
 
 ## Developer's Guide
 If you are a developer and want to contribute to the "x735-script" or perform further development, follow these steps:
