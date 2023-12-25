@@ -1,12 +1,12 @@
-# Overview
+# Overview:
 The "x735-script" is a Bash script designed to manage the x735 Power Management and Cooling Expansion Board (HAT) for Raspberry Pi 3 and 4. This script enables the user to control various features of the x735 board, including restarting or shutting down the Raspberry Pi using a physical button on the x735 board. Additionally, it uses the PWM pin to control the speed of the fan based on the CPU temperature, providing efficient cooling.
 
-## Features
+## Features:
 Control over GPIO pins to activate the restart and shutdown button on the x735 board.
 Dynamic fan speed control based on the CPU temperature for optimal cooling.
 Automatic installation of the x735off command, enabling safe shutdown of the Raspberry Pi with the x735 HAT.
 
-## Installation
+## Installation:
 Installing the `x735-script` is a straightforward process. To begin, simply click on the link below to access the latest release:
 
 **[https://github.com/molhamalnasr/x735-script/releases/latest](https://github.com/molhamalnasr/x735-script/releases/latest)**
@@ -17,7 +17,7 @@ If you prefer to install an older version of the script for compatibility or oth
 
 **[https://github.com/molhamalnasr/x735-script/releases](https://github.com/molhamalnasr/x735-script/releases)**
 
-## Developer's Guide
+## Developer's Guide:
 If you are a developer and want to contribute to the "x735-script" or perform further development, follow these steps:
 
 - Install the necessary dependencies:
@@ -48,7 +48,7 @@ You can verify the content and installation information of the "x735-script" pac
 sudo dpkg -I x735-script-pkg.deb
 ```
 
-## Release Information for Developers
+## Release Information for Developers:
 For developers, please note the following steps to set up the necessary configurations for automated releases:
 
 1. Generate a "Personal Access Token" in your Github account settings with the required permissions. Make sure to grant the "repo" scope to enable access for repository-related actions and name it `CREATE_RELEASE_TOKEN`.
@@ -61,12 +61,12 @@ These steps are essential for enabling the Github Actions workflow to create aut
 
 By following these instructions, you ensure a streamlined process for managing releases and promoting collaboration among developers in the project.
 
-## User Guide
+## User Guide:
 For detailed instructions on how to use the "x735-script" and leverage its features, please refer to the official User Guide available at:
 
 [https://wiki.geekworm.com/X735-script](https://wiki.geekworm.com/X735-script)
 
-#### Contact
+#### Contact:
 For any questions, issues, or support related to the "x735-script," you can reach out to the development team at:
 
 Email: [support@geekworm.com](mailto:support@geekworm.com)
