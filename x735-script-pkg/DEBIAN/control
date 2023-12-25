@@ -1,6 +1,6 @@
 Package: x735-script
 Description: Safe shutdown script and fan control for the x735 fan board from geekworm. This package contains a safe shutdown script and fan control for the x735 fan board.
-Version: 3.0.0
+Version: 3.0.1
 Section: misc
 Priority: optional
 Maintainer: Molham Al Nasr <dr.molham93@gmail.com>
