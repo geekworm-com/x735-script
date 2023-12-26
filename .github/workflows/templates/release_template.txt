@@ -1,0 +1,79 @@
+# Fan Control and Power Management Script Release v##TAG_NAME##
+
+We're excited to announce the release of our Fan Control and Power Management Script for Linux Debian on ARM64 and ARMHF architectures! This script allows you to seamlessly control fan speed on your Raspberry Pi and efficiently manage power settings for optimal performance.
+
+## Installation
+
+To get started, follow these simple steps to install the script on your Raspberry Pi:
+
+### 1. Download the Package
+
+For ARM64 architecture, open your terminal and run:
+
+```bash
+wget https://github.com/##REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_arm64.deb
+```
+
+For ARMHF architecture, use:
+
+```bash
+wget https://github.com/##REPO##/releases/download/v##TAG_NAME##/x735-script_##TAG_NAME##_armhf_.deb
+```
+
+### 2. Install the Package
+
+Once the package is downloaded, install it using the following command:
+
+For ARM64 architecture, run:
+
+```bash
+sudo dpkg -i x735-script_##TAG_NAME##_arm64.deb
+```
+
+For ARMHF architecture, use:
+
+```bash
+sudo dpkg -i x735-script_##TAG_NAME##_armhf_.deb
+```
+
+### 3. Reboot Your System
+
+After the installation is complete, it's important to reboot your system for the changes to take effect. Run:
+
+```bash
+sudo reboot
+```
+
+## Usage
+
+This Bash script offers seamless control over your Raspberry Pi's fan speed and power management, ensuring optimal performance while maintaining efficient temperature regulation. With the added convenience of safe shutdown capabilities, you can confidently power down your system using the command:
+
+``` bash
+sudo x735off
+```
+
+To monitor the fan speed and its operational status, simply query the `x735-fan.service` service using the following command:
+
+``` bash
+systemctl status x735-fan.service
+```
+
+Should you wish to take manual control of the fan, you have the flexibility to halt or restart it using the respective commands:
+
+``` bash
+sudo systemctl stop x735-fan.service
+sudo systemctl start x735-fan.service
+```
+
+This script empowers you to fine-tune your Raspberry Pi's performance by automatically adjusting fan speed as needed, ensuring a cool and optimized computing experience. The seamless integration of power management and temperature control provides a comprehensive solution for Raspberry Pi enthusiasts seeking both reliability and performance.
+
+## Changelog
+
+- **v##TAG_NAME## (##RELEASE_DATE##):**
+  ##MSG##
+
+## Get Involved
+
+We're committed to continuous improvement and welcome your feedback. If you encounter any issues or have suggestions for enhancements, please [open an issue](https://github.com/##REPO##/issues) on our GitHub repository.
+
+Thank you for choosing our Fan Control and Power Management Script. We hope it enhances your Raspberry Pi usage experience!

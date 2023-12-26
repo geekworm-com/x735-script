@@ -1,0 +1,127 @@
+name: Build and Package Fan Board Script
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  WORKFLOW_PATH: ${GITHUB_WORKSPACE}/.github/workflows
+  PACKAGE_DEBIAN: ${GITHUB_WORKSPACE}/x735-script-pkg/DEBIAN
+  USER_NAME: ${{ vars.USER_NAME }}
+  USER_EMAIL: ${{ vars.USER_EMAIL }}
+
+jobs:
+  update_repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          token: ${{ secrets.CREATE_RELEASE_TOKEN }}
+
+      - name: Install Dependencies
+        run: |
+          # Install any necessary dependencies for modifing the repository
+          sudo apt update && sudo apt install -y devscripts
+      
+      - name: Set up Environment
+        id: update_repo_settings
+        run: |
+          git config --local user.name "${{ env.USER_NAME }}"
+          git config --local user.email "${{ env.USER_EMAIL }}"
+          
+          # changelog message gonna be in this case the last commit message where the tag is created.
+          echo "changelog_msg=$(git log -1 --pretty=%B)" >> "$GITHUB_OUTPUT"
+          echo "tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')" >> "$GITHUB_OUTPUT"
+          
+      - name: Update and Commit Changelog
+        run: |
+          export DEBFULLNAME="${{ env.USER_NAME }}"
+          export DEBEMAIL="${{ env.USER_EMAIL }}"
+          /bin/bash ${{ env.WORKFLOW_PATH }}/bin/update_changelog.sh "${{ env.PACKAGE_DEBIAN }}/changelog" "${{ steps.update_repo_settings.outputs.changelog_msg }}" "${{ steps.update_repo_settings.outputs.tag_name }}"
+
+      - name: Update Version
+        run: |
+          sed -i '/^Version:.*/ c Version: ${{ steps.update_repo_settings.outputs.tag_name }}' "${{ env.PACKAGE_DEBIAN }}/control"
+
+      - name: Commit Changelog Changes
+        id: commit_changelog
+        run: |
+          git add .
+          git commit -m "Update Changelog and Set Version to ${{ steps.update_repo_settings.outputs.tag_name }}"
+          #git remote set-url --push origin "https://${{ secrets.CREATE_RELEASE_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push --follow-tags origin main
+
+          # Store the commit SHA as an output variable
+          echo "update_repo_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+    outputs:
+      tag_name: ${{ steps.update_repo_settings.outputs.tag_name }}
+      update_repo_sha: ${{ steps.commit_changelog.outputs.update_repo_sha }}
+      changelog_msg: ${{ steps.update_repo_settings.outputs.changelog_msg }}
+
+
+
+  build_and_package:
+    runs-on: ubuntu-latest
+    needs: update_repo
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.update_repo.outputs.update_repo_sha }}  # Use the update_repo_sha output from the previous job
+
+      - name: Install Dependencies
+        run: |
+          echo "Install any necessary dependencies for building your script here"
+          sudo apt update && sudo apt install -y dpkg qemu-user-static jq
+
+      - name: Set up QEMU for arm64
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+      - name: Granting Permissions
+        run: |
+          # Grant execute permission to all files in DEBIAN directory, but the compat file
+          find ${{ env.PACKAGE_DEBIAN }} -type f ! -name 'compat' -exec chmod +x {} \;
+      
+      - name: Build different ARCH Versions
+        run: |
+          # Run the create-version.sh script to build different versions
+          /bin/bash ${{ env.WORKFLOW_PATH }}/bin/create-version.sh "${GITHUB_WORKSPACE}" "${{ env.PACKAGE_DEBIAN }}/control" "${{ needs.update_repo.outputs.tag_name }}"
+
+      - name: Save Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: x735-script-artifacts
+          path: versions/x735-script_*.deb
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release Version ${{ needs.update_repo.outputs.tag_name }}
+          draft: false
+          prerelease: false
+      
+      - name: Upload Artifacts to Release and update Release Note
+        run: |
+          # Update Release Note
+          /bin/bash ${{ env.WORKFLOW_PATH }}/bin/create_release_note.sh \
+            "${{ env.WORKFLOW_PATH }}/templates/release_template.txt" \
+            "${{ github.repository }}" \
+            "${{ secrets.CREATE_RELEASE_TOKEN }}" \
+            "${{ steps.create_release.outputs.id }}" \
+            "${{ needs.update_repo.outputs.changelog_msg }}"
+
+          # Add a loop to upload each artifact
+          for artifact in ${GITHUB_WORKSPACE}/versions/x735-script_*.deb; do
+            /bin/bash ${{ env.WORKFLOW_PATH }}/bin/upload-artifacts.sh "$artifact" "${{ steps.create_release.outputs.upload_url }}" "${{ secrets.CREATE_RELEASE_TOKEN }}"
+          done

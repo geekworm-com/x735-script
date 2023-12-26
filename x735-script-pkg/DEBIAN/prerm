@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+# Enable and start the services after package installation
+echo "disabling and stopping the services..."
+if [ -x /bin/systemctl ]; then
+  sudo systemctl stop x735-fan.service
+  sudo systemctl stop x735-pwr.service
+  sudo systemctl disable x735-fan.service
+  sudo systemctl disable x735-pwr.service
+  sudo systemctl daemon-reload
+fi

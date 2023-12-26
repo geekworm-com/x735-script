@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -e
+
+SLEEP=${1:-4}
+
+readonly BUTTON=20
+readonly GPIO_PATH="/sys/class/gpio"
+readonly BUTTON_PATH="${GPIO_PATH}/gpio${BUTTON}"
+
+readonly PERMISSION_DENIED="151"
+readonly INVALID_CLI_ARG_TYPE="153"
+
+readonly STATE_EXPORT="export"
+readonly STATE_UNEXPORT="unexport"
+
+terminate() {
+    local -r msg=$1
+    local -r err_code=${2:-150}
+    echo "${msg}" >&2
+    exit "${err_code}"
+}
+
+# Guard clause to check if the script is running with root privileges (sudo)
+if [[ $EUID -ne 0 ]]; then
+    terminate "This script must be run with root privileges (sudo)." "${PERMISSION_DENIED}"
+fi
+
+if ! [[ $SLEEP =~ ^[0-9\.]+$ ]] ; then
+   terminate "error: sleep time not a number" "${INVALID_CLI_ARG_TYPE}"
+fi
+
+# export / unexport a GPIO
+un_export_gpio() {
+   local -r state="$1"
+
+   echo "${BUTTON}" > "${GPIO_PATH}/${state}"
+}
+
+modify_gpio_val() {
+   local -r file="$1"
+   local -r value="$2"
+
+   echo "${value}" > "${BUTTON_PATH}/${file}"
+}
+
+gpio_cleanup() {
+   un_export_gpio "${STATE_UNEXPORT}"
+   terminate "unexpected error..."
+}
+
+# Main method
+function __main__ {
+  un_export_gpio "${STATE_EXPORT}"
+  
+  # Handle exit and interrupt signals to cleanup GPIO
+  trap gpio_cleanup EXIT SIGINT SIGTERM
+
+  modify_gpio_val "direction" "out"
+  modify_gpio_val "value" "1"
+
+  # Broadcast the sutdown message to all tty sessions.
+  printf "Your device will shut down in %d seconds...\n" "$SLEEP" | wall
+  /bin/sleep $SLEEP
+
+  modify_gpio_val "value" "0"
+}
+
+__main__

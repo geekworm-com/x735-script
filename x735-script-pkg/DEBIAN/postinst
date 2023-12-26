@@ -1,0 +1,80 @@
+#!/bin/bash
+
+set -e
+
+readonly LINE_TO_ADD="dtoverlay=pwm-2chan,pin2=13,func2=4"
+readonly CONFIG_FILE="/boot/config.txt"
+readonly BACKUP_FILE="${CONFIG_FILE}.backup"
+
+readonly PERMISSION_DENIED="151"
+readonly FILE_NOT_EXIST="152"
+
+terminate() {
+    local -r msg=$1
+    local -r err_code=${2:-150}
+    echo "${msg}" >&2
+    exit "${err_code}"
+}
+
+# Check if the script is not running with root privileges (sudo)
+if [[ $EUID -ne 0 ]]; then
+    terminate "This script must be run with root privileges (sudo)." "${PERMISSION_DENIED}"
+fi
+
+# Check if the config file exists
+if [[ ! -e "${CONFIG_FILE}" ]]; then
+    terminate "Config file not found: ${CONFIG_FILE}" "${FILE_NOT_EXIST}"
+fi
+
+# Backup the config file
+cp -p "${CONFIG_FILE}" "${BACKUP_FILE}"
+
+# Search for the all directive in /boot/config.txt
+search_directive=$(grep -n '^\[all\]' "${CONFIG_FILE}")
+
+# Create the [all] directive in /boot/config.txt, if it doesn't exist and append the $LINE_TO_ADD to it
+if [[ -z "${search_directive}" ]]; then
+  echo "[all]" >> "${CONFIG_FILE}"
+  echo "${LINE_TO_ADD}" >> "${CONFIG_FILE}"
+  exit 0
+fi
+
+# Get the line number of the last defined "all" directive
+last_directive_line_number=$(echo "${search_directive}" | cut -d':' -f1 | tail -n1)
+
+# Check if the $LINE_TO_ADD exists in the last [all] directive
+line_exist=$(sed -n "${last_directive_line_number},/\[.*\]/ {/^\s*${LINE_TO_ADD}/=}" "${CONFIG_FILE}")
+
+if [[ -n "${line_exist}" ]]; then
+  echo "The line '${LINE_TO_ADD}' is already present in the right place in '${CONFIG_FILE}'"
+  echo "Continuing with the installation..."
+  exit 0
+fi
+
+# If the $LINE_TO_ADD exists but it's commented out, uncomment it.
+line_commented=$(sed -n "${last_directive_line_number},/\[.*\]/ {/^\s*#*\s*${LINE_TO_ADD}/=}" "${CONFIG_FILE}")
+if [[ -n "${line_commented}" ]]; then
+  echo "The line '${LINE_TO_ADD}' is already present in '${CONFIG_FILE}' but it is commented out"
+  echo "Uncommenting '${LINE_TO_ADD}'"
+  sed -i "${line_commented} s/^\s*#*\s*//" "${CONFIG_FILE}"
+  exit 0
+fi
+
+# If the "all" directive exists but the $LINE_TO_ADD does not exist, append the $LINE_TO_ADD to the all directive.
+echo "Adding the line '${LINE_TO_ADD}' for the first time in '${CONFIG_FILE}'"
+sed -i "${last_directive_line_number} a ${LINE_TO_ADD}" "${CONFIG_FILE}"
+
+# granting permession for all executables.
+chmod +x /usr/bin/x735off
+chmod +x /usr/lib/x735-script/scripts/*.sh
+
+# Enable and start the services after package installation
+echo "enabling and starting the services..."
+if [ -x /bin/systemctl ]; then
+  systemctl daemon-reload
+  systemctl enable x735-fan.service
+  systemctl enable x735-pwr.service
+fi
+
+echo -e "\033[31mPlease restart the device by running the following command:\033[0m"
+echo -e "\t'sudo reboot'"
