@@ -23,7 +23,7 @@ if [ -d "$dir_name" ]; then
   
     # 重命名目录  
     mv "$dir_name" "$new_dir_name"  
-    echo "目录已重命名为 $new_dir_name"  
+    echo "The old catalogue has been renamed $new_dir_name" 
 fi
 
 # 创建目录结构
