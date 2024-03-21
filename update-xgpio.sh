@@ -6,29 +6,36 @@
 # 可以参考 https://github.com/geekworm-com/xgpio 来了解xgpio_pwr和xgpio_soft
 # 我们需要在ubuntu环境中编译一下这个程序，也可以直接使用我们编译好的程序；
 
-file_path="xgpio_pwr"
-if [ -f "$file_path" ]; then
-    sudo rm -f "$file_path"
+# 指定要操作的目录名  
+dir_name="bin" 
+  
+# 检查目录是否存在 & 备份旧的bin目录
+if [ -d "$dir_name" ]; then  
+    # 目录存在，准备重命名  
+    counter=1  
+    new_dir_name="${dir_name}.${counter}"  
+  
+    # 检查是否存在同名的目录，如果存在则递增计数器  
+    while [ -e "$new_dir_name" ]; do  
+        counter=$((counter + 1))  
+        new_dir_name="${dir_name}.${counter}"  
+    done  
+  
+    # 重命名目录  
+    mv "$dir_name" "$new_dir_name"  
+    echo "目录已重命名为 $new_dir_name"  
 fi
 
-file_path="xgpio_soft"
-if [ -f "$file_path" ]; then
-    sudo rm -f "$file_path"
-fi
+# 创建目录结构
+mkdir -p bin/ubuntu bin/bookworm    
 
 # 下载可执行文件
-wget https://github.com/geekworm-com/xgpio/raw/main/bin/ubuntu/xgpio_pwr  /bin/ubuntu/xgpio_pwr
 
-wget https://github.com/geekworm-com/xgpio/raw/main/bin/ubuntu/xgpio_soft /bin/ubuntu/xgpio_soft
+wget -O bin/ubuntu/xgpio_pwr    https://github.com/geekworm-com/xgpio/raw/main/bin/ubuntu/xgpio_pwr
+wget -O bin/ubuntu/xgpio_soft   https://github.com/geekworm-com/xgpio/raw/main/bin/ubuntu/xgpio_soft
 
+wget -O bin/bookworm/xgpio_pwr  https://github.com/geekworm-com/xgpio/raw/main/bin/bookworm/xgpio_pwr
+wget -O bin/bookworm/xgpio_soft https://github.com/geekworm-com/xgpio/raw/main/bin/bookworm/xgpio_soft
 
-# 设置+x属性
-file_path="xgpio_pwr"
-if [ -f "$file_path" ]; then
-    chmod +x "$file_path"
-fi
-
-file_path="xgpio_soft"
-if [ -f "$file_path" ]; then
-    chmod +x "$file_path"
-fi
+# 给目录bin/下的所有文件set execute access
+find bin/ -type f -exec chmod +x {} \;
