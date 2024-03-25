@@ -3,7 +3,7 @@ Description=Run Hardware Power Management & Safe Shutdown daemon
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/x735-pwr.sh
+ExecStart=/usr/local/bin/xPWR.sh 0 5 12
 Restart=always
 
 User=root
