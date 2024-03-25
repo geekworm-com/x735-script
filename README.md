@@ -27,6 +27,8 @@ BOOT=12
 >/usr/local/bin/xPWR.sh 0 5 12
 
 ## If working with Raspberry Pi 5 hardware, the following changes need to be made after cloning the file
->sed -i 's/xSoft.sh 0 20/xSoft.sh 4 20/g' install-sss.sh
->sed -i 's/xPWR.sh 0 5 12/xPWR.sh 4 5 12/g' x735-pwr.service
->sed -i 's/pwmchip0/pwmchip2/g' x735-fan.sh
+```
+sed -i 's/xSoft.sh 0 20/xSoft.sh 4 20/g' install-sss.sh
+sed -i 's/xPWR.sh 0 5 12/xPWR.sh 4 5 12/g' x735-pwr.service
+sed -i 's/pwmchip0/pwmchip2/g' x735-fan.sh
+```
