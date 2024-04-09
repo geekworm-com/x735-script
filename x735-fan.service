@@ -3,7 +3,10 @@ Description=Daemon to monitor and control fan speed
 
 [Service]
 ExecStart=/usr/local/bin/x735-fan.sh
-#ExecStart=python3 pwm_fan_control.py
+
+#You may need install the following python3 package for pwm_fan_control.py
+#sudo apt-get install -y python3-rpi.gpio
+#ExecStart=python3 /usr/local/bin/pwm_fan_control.py
 
 Type=simple
 Restart=always
