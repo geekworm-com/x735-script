@@ -3,8 +3,13 @@ Description=Daemon to monitor and control fan speed
 
 [Service]
 ExecStart=/usr/local/bin/x735-fan.sh
+#ExecStart=python3 pwm_fan_control.py
+
 Type=simple
 Restart=always
+
+User=root
+Group=root
 
 [Install]
 WantedBy=multi-user.target
