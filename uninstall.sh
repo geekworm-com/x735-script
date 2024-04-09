@@ -13,6 +13,12 @@ if [ -f "$file_path" ]; then
     sudo rm -f "$file_path"
 fi
 
+file_path="/usr/local/bin/pwm_fan_control.py"
+if [ -f "$file_path" ]; then
+    sudo rm -f "$file_path"
+fi
+
+
 # Uninstall x735-pwr.service
 sudo systemctl stop x735-pwr
 sudo systemctl disable x735-pwr
