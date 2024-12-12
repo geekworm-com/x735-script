@@ -7,7 +7,7 @@ Type=simple
 ExecStart=/usr/local/bin/xPWR.sh 0 5 12
 
 # for X735 V1.0
-#ExecStart=/usr/local/bin/xPWR.sh 0 7 11
+#ExecStart=/usr/local/bin/xPWR.sh 0 4 17
 Restart=always
 
 User=root
