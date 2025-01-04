@@ -3,7 +3,7 @@
 set -e
 
 readonly LINE_TO_ADD="dtoverlay=pwm-2chan,pin2=13,func2=4"
-readonly CONFIG_FILE="/boot/config.txt"
+readonly CONFIG_FILE="/boot/firmware/config.txt"
 readonly BACKUP_FILE="${CONFIG_FILE}.backup"
 
 readonly PERMISSION_DENIED="151"
@@ -29,10 +29,10 @@ fi
 # Backup the config file
 cp -p "${CONFIG_FILE}" "${BACKUP_FILE}"
 
-# Search for the all directive in /boot/config.txt
+# Search for the all directive in $CONFIG_FILE
 search_directive=$(grep -n '^\[all\]' "${CONFIG_FILE}")
 
-# Create the [all] directive in /boot/config.txt, if it doesn't exist and append the $LINE_TO_ADD to it
+# Create the [all] directive in $CONFIG_FILE, if it doesn't exist and append the $LINE_TO_ADD to it
 if [[ -z "${search_directive}" ]]; then
   echo "[all]" >> "${CONFIG_FILE}"
   echo "${LINE_TO_ADD}" >> "${CONFIG_FILE}"
