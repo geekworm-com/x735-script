@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: main
           token: ${{ secrets.CREATE_RELEASE_TOKEN }}
@@ -34,7 +34,7 @@ jobs:
           git config --local user.email "${{ env.USER_EMAIL }}"
           
           # changelog message gonna be in this case the last commit message where the tag is created.
-          echo "changelog_msg=$(git log -1 --pretty=%B)" >> "$GITHUB_OUTPUT"
+          echo "changelog_msg=$(git log -1 --pretty=%B | head -n 1)" >> "$GITHUB_OUTPUT"
           echo "tag_name=$(echo "${GITHUB_REF}" | sed -n 's|^refs/tags/v||p')" >> "$GITHUB_OUTPUT"
           
       - name: Update and Commit Changelog
