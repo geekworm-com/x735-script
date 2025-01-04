@@ -2,5 +2,6 @@ x735-script (3.0.1) UNRELEASED; urgency=medium
 
   * Initial Release. [v3.0.0]
   * edit README [v3.0.1]
+  * update checkout repo and the changelog_msg [v3.0.1]
 
- -- Molham Al Nasr <dr.molham93@gmail.com>  Mon, 25 Dec 2023 10:23:45 +0000
+ -- Molham Al Nasr <dr.molham93@gmail.com>  Sat, 04 Jan 2025 11:14:31 +0000
