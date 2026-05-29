@@ -30,10 +30,10 @@ REBOOTPULSEMINIMUM=200
 REBOOTPULSEMAXIMUM=600  
   
 # Initialize the BOOT pin to 1
-gpioset $GPIOCHIP $BOOT=1  
+gpioset -c gpiochip$GPIOCHIP $BOOT=1  
   
 while [ 1 ]; do  
-  shutdownSignal=$(gpioget $GPIOCHIP $SHUTDOWN)  
+  shutdownSignal=$(gpioget -c gpiochip$GPIOCHIP $SHUTDOWN)  
   if [ $shutdownSignal -eq 0 ]; then  
     sleep 0.2  
   else  
@@ -45,7 +45,7 @@ while [ 1 ]; do
         sudo poweroff  
         exit  
       fi  
-      shutdownSignal=$(gpioget $GPIOCHIP $SHUTDOWN)  
+      shutdownSignal=$(gpioget -c gpiochip$GPIOCHIP $SHUTDOWN)  
     done  
     if [ $(($(date +%s%N | cut -b1-13)-$pulseStart)) -gt $REBOOTPULSEMINIMUM ]; then  
       echo "Your device is rebooting on pin $SHUTDOWN, recycling Rpi ..."  
